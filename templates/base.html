@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkyLink Airlines</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header class="global-header">
+        <a href="{{ url_for('index') }}" class="brand-logo">
+            <img src="{{ url_for('static', filename='images/SkyLink Airlines Logo - Improved.jpg') }}" alt="SkyLink Airlines Logo">
+        </a>
+        <nav class="nav-links">
+            <a href="{{ url_for('index') }}">Home</a>
+            <a href="{{ url_for('search_flights') }}">Search Flights</a>
+            <a href="{{ url_for('my_bookings') }}">My Bookings</a>
+            <a href="{{ url_for('about') }}">About Us</a>
+            <a href="{{ url_for('contact') }}">Contact Us</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        <!-- Flash Messages for Server-Side Feedback -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <!-- Dynamic Content Injected Here -->
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <p>&copy; 2026 SkyLink Airlines. Your Journey. Our Priority.</p>
+        <p>Contact: support@skylinkairlines.com | +254 700 000 000</p>
+    </footer>
+
+    <!-- Chatbot Widget -->
+    <div id="chatbot-widget" style="position: fixed; bottom: 20px; right: 20px; width: 300px; background: white; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 1000; overflow: hidden; display: flex; flex-direction: column;">
+
+        <div id="chat-header" style="background-color: var(--midnight-navy); color: white; padding: 12px; font-weight: bold; cursor: pointer; display: flex; justify-content: space-between; align-items: center;">
+            <span>SkyLink Support Chat</span>
+            <span id="chat-toggle" style="font-size: 18px;">+</span>
+        </div>
+
+        <div id="chat-body" style="display: none; flex-direction: column; height: 350px;">
+            <div id="chat-messages" style="flex: 1; padding: 12px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; font-size: 14px; background-color: var(--cloud);">
+                <div style="background-color: #e2e8f0; padding: 8px 12px; border-radius: 12px 12px 12px 0; align-self: flex-start; max-width: 80%;">
+                    Hi there! How can I help you learn more about SkyLink Airlines today?
+                </div>
+            </div>
+
+            <div style="padding: 12px; border-top: 1px solid #ddd; display: flex; gap: 8px; background: white;">
+                <input type="text" id="chat-input" placeholder="Type a message..." style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 20px; outline: none;">
+                <button id="chat-send" style="background-color: var(--aviation-blue); color: white; border: none; border-radius: 50%; width: 36px; height: 36px; cursor: pointer;">&#10148;</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

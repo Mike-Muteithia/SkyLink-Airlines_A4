@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="admin-container" style="max-width: 600px; margin: 0 auto;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+        <h2>Edit Flight: {{ flight.flight_number }}</h2>
+        <a href="{{ url_for('admin_dashboard') }}" style="color: var(--aviation-blue);">Cancel</a>
+    </div>
+    
+    <div class="card">
+        <p style="color: #666; margin-bottom: 16px;">Route: {{ flight.departure_city }} &rarr; {{ flight.destination_city }}</p>
+        <form action="{{ url_for('edit_flight', flight_id=flight.flight_id) }}" method="POST">
+            <div style="display: grid; grid-template-columns: 1fr; gap: 16px; margin-bottom: 24px;">
+                <div>
+                    <label style="font-weight: bold; font-size: 14px;">Departure Date</label>
+                    <input type="date" name="departure_date" value="{{ flight.departure_date }}" required>
+                </div>
+                <div>
+                    <label style="font-weight: bold; font-size: 14px;">Departure Time</label>
+                    <input type="time" name="departure_time" value="{{ flight.departure_time }}" required>
+                </div>
+                <div>
+                    <label style="font-weight: bold; font-size: 14px;">Arrival Time</label>
+                    <input type="time" name="arrival_time" value="{{ flight.arrival_time }}" required>
+                </div>
+                <div>
+                    <label style="font-weight: bold; font-size: 14px;">Ticket Price (KSh)</label>
+                    <input type="number" name="ticket_price" step="0.01" value="{{ flight.ticket_price }}" required>
+                </div>
+            </div>
+            <button type="submit" class="btn-primary" style="width: 100%;">Update Flight</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

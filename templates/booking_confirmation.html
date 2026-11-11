@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="confirmation-container">
+    <div class="alert alert-success" style="margin-bottom: 24px;">
+        <strong>&#10003; Booking confirmed</strong><br>
+        Your itinerary is ready. Keep this reference for your records.
+    </div>
+
+    <div class="card ticket-card" style="border: 2px solid var(--aviation-blue); padding: 0;">
+        <div style="background-color: var(--cloud); padding: 16px 24px; border-bottom: 1px solid #ddd; display: flex; justify-content: space-between; align-items: center;">
+            <strong style="color: var(--aviation-blue);">SKYLINK BOARDING PASS</strong>
+            <span style="background-color: #dcfce7; color: #166534; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold;">{{ booking.booking_status|upper }}</span>
+        </div>
+        <div style="padding: 24px; display: flex; justify-content: space-between; align-items: center;">
+            <div style="text-align: left;">
+                <h2 style="font-size: 32px; margin: 0;">{{ booking.departure_city.split(' ')[-1].strip('()') }}</h2>
+                <p style="color: #666;">{{ booking.departure_city.split(' ')[0] }} &bull; {{ booking.departure_time }}</p>
+            </div>
+            <div style="color: #ccc; font-size: 24px;">&rarr;</div>
+            <div style="text-align: right;">
+                <h2 style="font-size: 32px; margin: 0;">{{ booking.destination_city.split(' ')[-1].strip('()') }}</h2>
+                <p style="color: #666;">{{ booking.destination_city.split(' ')[0] }}</p>
+            </div>
+        </div>
+        <div style="background-color: var(--cloud); padding: 16px 24px; border-top: 1px solid #ddd; display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; font-size: 12px; color: var(--ink);">
+            <div><strong>BOOKING REF:</strong><br>{{ booking.booking_reference }}</div>
+            <div><strong>PASSENGER:</strong><br>{{ booking.full_name }} ({{ booking.number_of_passengers }} pax)</div>
+            <div><strong>FLIGHT:</strong><br>{{ booking.flight_number }}</div>
+            <div><strong>TOTAL COST:</strong><br>KSh {{ "{:,.2f}".format(booking.total_cost) }}</div>
+        </div>
+    </div>
+
+    <div style="margin-top: 24px; text-align: center;" class="no-print">
+        <button onclick="window.print()" class="btn-primary" style="margin-right: 16px;">Print Ticket</button>
+        <a href="{{ url_for('index') }}" style="color: var(--aviation-blue); font-weight: bold;">Return to Home</a>
+    </div>
+</div>
+
+<style>
+    @media print {
+        body * { visibility: hidden; }
+        .ticket-card, .ticket-card * { visibility: visible; }
+        .ticket-card { position: absolute; left: 0; top: 0; width: 100%; border: none !important; }
+        .no-print { display: none; }
+        .global-header, footer { display: none; }
+    }
+</style>
+{% endblock %}

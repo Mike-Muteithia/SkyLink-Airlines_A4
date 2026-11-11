@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="hero-section card" style="background-color: var(--midnight-navy); color: white; border-radius: var(--radius-card); padding: 48px 24px; text-align: center; margin-bottom: -40px; z-index: 1; position: relative;">
+    <h1 style="color: white; font-size: 40px; margin-bottom: 8px;">Explore more. Worry less.</h1>
+    <p style="font-size: 18px; color: var(--sky);">Simple, reliable journeys across the region.</p>
+</div>
+
+<div class="search-panel card" style="position: relative; z-index: 2; margin: 0 24px 48px 24px; padding: 32px; box-shadow: 0 8px 24px rgba(0,0,0,0.1);">
+    <form action="{{ url_for('search_flights') }}" method="POST" style="display: flex; gap: 16px; align-items: flex-end; flex-wrap: wrap;">
+        
+        <div style="flex: 1; min-width: 200px;">
+            <label for="departure_city" style="font-size: 12px; font-weight: bold; color: var(--ink);">FROM</label>
+            <select name="departure_city" id="departure_city" required>
+                <option value="" disabled selected>Select Origin</option>
+                <option value="Nairobi">Nairobi (NBO)</option>
+                <option value="Mombasa">Mombasa (MBA)</option>
+                <option value="Kisumu">Kisumu (KIS)</option>
+            </select>
+        </div>
+
+        <div style="flex: 1; min-width: 200px;">
+            <label for="destination_city" style="font-size: 12px; font-weight: bold; color: var(--ink);">TO</label>
+            <select name="destination_city" id="destination_city" required>
+                <option value="" disabled selected>Select Destination</option>
+                <option value="Mombasa">Mombasa (MBA)</option>
+                <option value="Nairobi">Nairobi (NBO)</option>
+                <option value="Kisumu">Kisumu (KIS)</option>
+            </select>
+        </div>
+
+        <div style="flex: 1; min-width: 150px;">
+            <label for="departure_date" style="font-size: 12px; font-weight: bold; color: var(--ink);">DEPARTURE</label>
+            <input type="date" name="departure_date" id="departure_date" required min="{{ range(1, 10000) | random }}"> 
+            <!-- We will use JS to set the minimum date to today -->
+        </div>
+
+        <div style="flex: 0 0 auto;">
+            <button type="submit" class="btn-primary">Search</button>
+        </div>
+    </form>
+</div>
+
+<div class="featured-destinations">
+    <h2 style="margin-bottom: 24px;">Popular destinations</h2>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px;">
+        <div class="card" style="border-top: 4px solid var(--sky);">
+            <h3>Mombasa</h3>
+            <p style="color: #666; font-size: 14px;">Coast & sunshine</p>
+        </div>
+        <div class="card" style="border-top: 4px solid var(--sky);">
+            <h3>Kisumu</h3>
+            <p style="color: #666; font-size: 14px;">Lakeside escapes</p>
+        </div>
+        <div class="card" style="border-top: 4px solid var(--sky);">
+            <h3>Eldoret</h3>
+            <p style="color: #666; font-size: 14px;">Rift Valley</p>
+        </div>
+    </div>
+</div>
+
+<!-- Add this right below the "Popular destinations" section -->
+<div class="upcoming-flights" style="margin-bottom: 48px;">
+    <h2 style="margin-bottom: 24px;">Featured Upcoming Flights</h2>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px;">
+        {% for flight in upcoming_flights %}
+        <div class="card flight-card" style="border-left: 4px solid var(--signal-orange); display: flex; flex-direction: column; justify-content: space-between; margin-bottom: 0;">
+            <div>
+                <h3 style="font-size: 18px; margin-bottom: 8px;">
+                    {{ flight.departure_city.split(' ')[0] }} &rarr; {{ flight.destination_city.split(' ')[0] }}
+                </h3>
+                <p style="color: #666; font-size: 14px; margin-bottom: 4px;">{{ flight.airline_name }} &bull; {{ flight.flight_number }}</p>
+                <div style="font-size: 14px; color: var(--ink); margin-bottom: 16px;">
+                    <p><strong>Date:</strong> {{ flight.departure_date }} at {{ flight.departure_time }}</p>
+                    <p><strong>Class:</strong> {{ flight.travel_class }} <span style="color: #166534; margin-left: 8px;">({{ flight.available_seats }} seats left)</span></p>
+                </div>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #eee; padding-top: 16px;">
+                <span style="font-size: 18px; font-weight: bold; color: var(--midnight-navy);">
+                    KSh {{ "{:,.2f}".format(flight.ticket_price) }}
+                </span>
+                <a href="{{ url_for('book_flight', flight_id=flight.flight_id) }}" class="btn-primary" style="padding: 8px 16px; font-size: 14px;">Book Now</a>
+            </div>
+        </div>
+        {% else %}
+        <p style="color: #666;">More flights will be scheduled soon.</p>
+        {% endfor %}
+    </div>
+
+    <!-- ADD THIS NEW BUTTON -->
+    <div style="text-align: center; margin-top: 32px;">
+        <a href="{{ url_for('search_flights') }}" class="btn-primary" style="background-color: var(--midnight-navy); display: inline-block;">View All Available Flights</a>
+    </div>
+</div>
+
+<script>
+    // Ensure departure date cannot be in the past
+    document.getElementById('departure_date').min = new Date().toISOString().split("T")[0];
+</script>
+{% endblock %}

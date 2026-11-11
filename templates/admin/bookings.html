@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="admin-container">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+        <h2>Booking Management</h2>
+        <a href="{{ url_for('admin_dashboard') }}" class="btn-primary" style="background-color: var(--ink);">Back to Dashboard</a>
+    </div>
+
+    <div class="card" style="margin-bottom: 24px;">
+        <form action="{{ url_for('admin_bookings') }}" method="GET" style="display: flex; gap: 16px;">
+            <input type="text" name="search" placeholder="Search by Booking Reference or Flight Number..." value="{{ search_query }}" style="flex: 1;">
+            <button type="submit" class="btn-primary">Search</button>
+            {% if search_query %}
+                <a href="{{ url_for('admin_bookings') }}" class="btn-primary" style="background-color: #666;">Clear</a>
+            {% endif %}
+        </form>
+    </div>
+
+    <div class="card" style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse; text-align: left; min-width: 900px;">
+            <thead>
+                <tr style="background-color: var(--cloud); border-bottom: 2px solid #ddd;">
+                    <th style="padding: 12px; font-size: 12px; color: #666; text-transform: uppercase;">Ref</th>
+                    <th style="padding: 12px; font-size: 12px; color: #666; text-transform: uppercase;">Passenger</th>
+                    <th style="padding: 12px; font-size: 12px; color: #666; text-transform: uppercase;">Flight No.</th>
+                    <th style="padding: 12px; font-size: 12px; color: #666; text-transform: uppercase;">Date</th>
+                    <th style="padding: 12px; font-size: 12px; color: #666; text-transform: uppercase;">Total (KSh)</th>
+                    <th style="padding: 12px; font-size: 12px; color: #666; text-transform: uppercase;">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for booking in bookings %}
+                <tr style="border-bottom: 1px solid #eee;">
+                    <td style="padding: 12px; font-weight: bold;">{{ booking.booking_reference }}</td>
+                    <td style="padding: 12px;">{{ booking.full_name }}<br><span style="font-size: 12px; color: #666;">{{ booking.email }}</span></td>
+                    <td style="padding: 12px;">{{ booking.flight_number }}</td>
+                    <td style="padding: 12px;">{{ booking.departure_date }}</td>
+                    <td style="padding: 12px;">{{ "{:,.2f}".format(booking.total_cost) }}</td>
+                    <td style="padding: 12px;">
+                        <span style="padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold;
+                            {% if booking.booking_status == 'Confirmed' %} background-color: #dcfce7; color: #166534;
+                            {% elif booking.booking_status == 'Cancelled' %} background-color: #fee2e2; color: #991b1b;
+                            {% else %} background-color: #fef3c7; color: #92400e; {% endif %}">
+                            {{ booking.booking_status }}
+                        </span>
+                    </td>
+                </tr>
+                {% else %}
+                <tr><td colspan="6" style="padding: 24px; text-align: center; color: #666;">No bookings found.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

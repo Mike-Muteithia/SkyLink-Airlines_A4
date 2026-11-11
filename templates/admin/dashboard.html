@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="admin-dashboard">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+        <h2>Operations Dashboard</h2>
+        <div>
+            <a href="{{ url_for('admin_bookings') }}" class="btn-primary" style="background-color: var(--aviation-blue); margin-right: 12px;">View All Bookings</a>
+            <a href="{{ url_for('admin_logout') }}" class="btn-primary" style="background-color: var(--ink);">Log Out</a>
+        </div>
+    </div>
+
+    <div class="metrics-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 24px; margin-bottom: 32px;">
+        <div class="card" style="text-align: center; border-top: 4px solid var(--aviation-blue);">
+            <h3 style="font-size: 32px; color: var(--aviation-blue); margin-bottom: 8px;">{{ flights|length }}</h3>
+            <p style="color: #666; font-size: 14px; text-transform: uppercase;">Active Flights</p>
+        </div>
+        <div class="card" style="text-align: center; border-top: 4px solid var(--sky);">
+            <h3 style="font-size: 32px; color: var(--sky); margin-bottom: 8px;">{{ total_bookings }}</h3>
+            <p style="color: #666; font-size: 14px; text-transform: uppercase;">Total Bookings</p>
+        </div>
+    </div>
+
+    <div class="card" style="overflow-x: auto;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+            <h3>Flight Management</h3>
+            <a href="{{ url_for('add_flight') }}" class="btn-primary" style="padding: 8px 16px; font-size: 14px;">+ Add Flight</a> 
+        </div>
+        
+        <table style="width: 100%; border-collapse: collapse; text-align: left; min-width: 800px;">
+            <thead>
+                <tr style="background-color: var(--cloud); border-bottom: 2px solid #ddd;">
+                    <th style="padding: 12px; font-size: 12px; color: #666; text-transform: uppercase;">Flight No.</th>
+                    <th style="padding: 12px; font-size: 12px; color: #666; text-transform: uppercase;">Route</th>
+                    <th style="padding: 12px; font-size: 12px; color: #666; text-transform: uppercase;">Date & Time</th>
+                    <th style="padding: 12px; font-size: 12px; color: #666; text-transform: uppercase;">Price (KSh)</th>
+                    <th style="padding: 12px; font-size: 12px; color: #666; text-transform: uppercase;">Seats (Avail/Total)</th>
+                    <th style="padding: 12px; font-size: 12px; color: #666; text-transform: uppercase;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for flight in flights %}
+                <tr style="border-bottom: 1px solid #eee;">
+                    <td style="padding: 12px; font-weight: bold;">{{ flight.flight_number }}</td>
+                    <td style="padding: 12px;">{{ flight.departure_city.split(' ')[-1].strip('()') }} &rarr; {{ flight.destination_city.split(' ')[-1].strip('()') }}</td>
+                    <td style="padding: 12px;">{{ flight.departure_date }} <br> <span style="color: #666; font-size: 12px;">{{ flight.departure_time }}</span></td>
+                    <td style="padding: 12px;">{{ "{:,.2f}".format(flight.ticket_price) }}</td>
+                    <td style="padding: 12px;">
+                        <span style="font-weight: bold; color: {% if flight.available_seats < 10 %}#ef4444{% else %}#166534{% endif %};">
+                            {{ flight.available_seats }}
+                        </span> / {{ flight.total_seats }}
+                    </td>
+                    <td style="padding: 12px; display: flex; gap: 12px; align-items: center;">
+                        <a href="{{ url_for('edit_flight', flight_id=flight.flight_id) }}" style="color: var(--aviation-blue); font-size: 14px;">Edit</a>
+                        <form action="{{ url_for('delete_flight', flight_id=flight.flight_id) }}" method="POST" onsubmit="return confirm('Delete this flight?');" style="margin: 0; padding: 0;">
+                            <button type="submit" style="background: none; border: none; color: #ef4444; font-size: 14px; cursor: pointer; text-decoration: underline; padding: 0;">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

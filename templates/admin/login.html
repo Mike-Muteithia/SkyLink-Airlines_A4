@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="login-container" style="max-width: 400px; margin: 48px auto;">
+    <div class="card">
+        <h2 style="text-align: center; margin-bottom: 24px; color: var(--midnight-navy);">Admin Login</h2>
+        <form action="{{ url_for('admin_login') }}" method="POST">
+            <div style="margin-bottom: 16px;">
+                <label for="username" style="font-weight: bold; font-size: 14px;">Username</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div style="margin-bottom: 24px;">
+                <label for="password" style="font-weight: bold; font-size: 14px;">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <button type="submit" class="btn-primary" style="width: 100%;">Log In</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

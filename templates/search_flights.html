@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="search-header" style="margin-bottom: 24px;">
+    <h2>Flight Search Results</h2>
+</div>
+
+<!-- ADD THE COMPACT SEARCH FILTER -->
+<div class="card" style="margin-bottom: 32px; background-color: var(--cloud); border: 1px solid #ddd;">
+    <form action="{{ url_for('search_flights') }}" method="POST" style="display: flex; gap: 16px; align-items: flex-end; flex-wrap: wrap;">
+        <div style="flex: 1; min-width: 200px;">
+            <label for="departure_city" style="font-size: 12px; font-weight: bold; color: var(--ink);">FROM</label>
+            <select name="departure_city" id="departure_city" required>
+                <option value="" disabled selected>Select Origin</option>
+                <option value="Nairobi">Nairobi (NBO)</option>
+                <option value="Mombasa">Mombasa (MBA)</option>
+                <option value="Kisumu">Kisumu (KIS)</option>
+                <option value="Eldoret">Eldoret (EDL)</option>
+                <option value="Malindi">Malindi (MYD)</option>
+            </select>
+        </div>
+        <div style="flex: 1; min-width: 200px;">
+            <label for="destination_city" style="font-size: 12px; font-weight: bold; color: var(--ink);">TO</label>
+            <select name="destination_city" id="destination_city" required>
+                <option value="" disabled selected>Select Destination</option>
+                <option value="Mombasa">Mombasa (MBA)</option>
+                <option value="Nairobi">Nairobi (NBO)</option>
+                <option value="Kisumu">Kisumu (KIS)</option>
+                <option value="Eldoret">Eldoret (EDL)</option>
+                <option value="Malindi">Malindi (MYD)</option>
+            </select>
+        </div>
+        <div style="flex: 1; min-width: 150px;">
+            <label for="departure_date" style="font-size: 12px; font-weight: bold; color: var(--ink);">DEPARTURE</label>
+            <input type="date" name="departure_date" id="departure_date" required min="{{ range(1, 10000) | random }}">
+        </div>
+        <div style="flex: 0 0 auto;">
+            <button type="submit" class="btn-primary">Filter</button>
+            <a href="{{ url_for('search_flights') }}" class="btn-primary" style="background-color: #666; margin-left: 8px;">Clear</a>
+        </div>
+    </form>
+</div>
+
+{% if flights %}
+    <div class="flight-results">
+        {% for flight in flights %}
+        <div class="card flight-card" style="display: flex; justify-content: space-between; align-items: center; border-left: 4px solid var(--aviation-blue);">
+            <div class="flight-info">
+                <h3 style="margin-bottom: 8px;">{{ flight.airline_name }} &bull; {{ flight.flight_number }}</h3>
+                <p style="color: var(--ink); font-family: monospace; font-size: 16px;">
+                    <strong>{{ flight.departure_city }}</strong> ({{ flight.departure_time }}) &rarr; 
+                    <strong>{{ flight.destination_city }}</strong> ({{ flight.arrival_time }})
+                </p>
+                <p style="font-size: 14px; color: #666; margin-top: 4px;">
+                    Date: {{ flight.departure_date }} | Class: {{ flight.travel_class }} | Available Seats: {{ flight.available_seats }}
+                </p>
+            </div>
+            <div class="flight-action" style="text-align: right;">
+                <p style="font-size: 20px; font-weight: bold; color: var(--midnight-navy); margin-bottom: 12px;">
+                    KSh {{ "{:,.2f}".format(flight.ticket_price) }}
+                </p>
+                <a href="{{ url_for('book_flight', flight_id=flight.flight_id) }}" class="btn-primary" style="display: inline-block;">Select flight</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="card empty-state" style="text-align: center; padding: 48px;">
+        <h3 style="color: var(--midnight-navy);">No flights found</h3>
+        <p style="color: #666; margin: 16px 0;">We couldn't find any flights matching your search criteria.</p>
+        <a href="{{ url_for('index') }}" class="btn-primary" style="display: inline-block;">Search Again</a>
+    </div>
+{% endif %}
+{% endblock %}

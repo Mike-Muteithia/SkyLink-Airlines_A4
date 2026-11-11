@@ -1,0 +1,117 @@
+/* static/css/style.css */
+:root {
+    /* Brand Colors */
+    --midnight-navy: #0B1F3A;
+    --aviation-blue: #1677C8;
+    --sky: #35A8E8;
+    --signal-orange: #F47721;
+    --cloud: #F3F7FB;
+    --ink: #172B4D;
+    
+    /* UI Scale & Spacing */
+    --radius-card: 12px;
+    --radius-control: 8px;
+    --spacing-base: 4px;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Inter', Arial, Helvetica, sans-serif;
+    color: var(--ink);
+    background-color: var(--cloud);
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Typography */
+h1, h2, h3 { color: var(--midnight-navy); }
+a { color: var(--aviation-blue); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* Navigation */
+.global-header {
+    background-color: var(--midnight-navy);
+    padding: 16px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.brand-logo img {
+    height: 40px;
+    background-color: white; /* Contrast for the logo */
+    padding: 4px;
+    border-radius: 4px;
+}
+
+.nav-links a {
+    color: white;
+    margin-left: 24px;
+    font-weight: 500;
+}
+.nav-links a:hover { color: var(--sky); text-decoration: none; }
+
+/* Buttons & Controls */
+.btn-primary {
+    background-color: var(--signal-orange);
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: var(--radius-control);
+    font-weight: bold;
+    cursor: pointer;
+    min-height: 44px; /* Accessible touch target */
+}
+.btn-primary:hover { opacity: 0.9; }
+.btn-primary:focus { outline: 2px solid var(--aviation-blue); outline-offset: 2px; }
+
+/* Forms & Inputs */
+input, select {
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: var(--radius-control);
+    min-height: 44px;
+    width: 100%;
+}
+input:focus, select:focus {
+    outline: 2px solid var(--aviation-blue);
+    outline-offset: 2px;
+    border-color: transparent;
+}
+
+/* Layout */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px;
+    flex: 1;
+}
+
+.card {
+    background: white;
+    border-radius: var(--radius-card);
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    margin-bottom: 24px;
+}
+
+/* Alerts */
+.alert { padding: 12px; margin-bottom: 24px; border-radius: var(--radius-control); }
+.alert-error { background-color: #fee2e2; color: #991b1b; border: 1px solid #f87171; }
+.alert-success { background-color: #dcfce7; color: #166534; border: 1px solid #4ade80; }
+.alert-info { background-color: #e0f2fe; color: #075985; border: 1px solid #38bdf8; }
+
+footer {
+    background-color: var(--midnight-navy);
+    color: white;
+    text-align: center;
+    padding: 24px;
+    margin-top: auto;
+}
