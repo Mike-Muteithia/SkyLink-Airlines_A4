@@ -1,10 +1,10 @@
 # SkyLink Airlines Flight Ticketing System
 
 ## Project Overview
-This project is a web-based Flight Ticketing System developed for SkyLink Airlines. It allows customers to search for flights, make reservations, retrieve booking details, and cancel bookings. It also includes an administrative dashboard for managing flights and viewing system metrics.
+This project is a web-based Flight Ticketing System developed for SkyLink Airlines. It allows customers to search for flights, make reservations, retrieve booking details, and cancel bookings. It also includes an administrative dashboard for managing flights and viewing system metrics. It also features a real-time, WebSocket-powered customer support chatbot capable of querying dynamic flight availability and retrieving booking statuses.
 
 ## Technologies Used
-*   **Backend:** Python 3.8, Flask
+*   **Backend:** Python 3.8, Flask, Flask-SocketIO
 *   **Frontend:** HTML5, CSS3, JavaScript (Jinja2 Templates)
 *   **Database:** SQLite3
 *   **Security:** Werkzeug (Password Hashing)
